@@ -1,0 +1,145 @@
+<<<<<<< HEAD
+#requires -version 3.0
+
+Function New-BingoCard {
+
+<#
+   .Synopsis
+    Create a Bingo card object 
+    .Description
+    This creates a standard bingo card object using traditional numbering. Each"row" is a separate object. You must use the custom format PS1XML file to properly format this object.
+    .Parameter Free
+    The number of free spaces to include in the card. The default is 1 with a maximum of 3.
+   .Example
+    PS C:\> New-BingoCard
+  
+    Write a bingo card object to the console
+   .Example
+    PS C:\> New-BingoCard -free 2 | convertto-html -title "Bingo" -css c:\work\bingo.css | out-file c:\work\bingo.htm
+    
+    Create an HTML version. This assumes you have created a CSS file to properly format the object.
+    
+   .Notes
+    NAME: New-BingoCard
+    AUTHOR: Jeffery Hicks
+    VERSION: 2.0
+    LASTEDIT: October 1, 2014
+    
+    Learn more:
+     PowerShell in Depth: An Administrator's Guide (http://www.manning.com/jones6/)
+     PowerShell Deep Dives (http://manning.com/hicks/)
+     Learn PowerShell 3 in a Month of Lunches (http://manning.com/jones3/)
+     Learn PowerShell Toolmaking in a Month of Lunches (http://manning.com/jones4/)
+      
+    .Inputs
+    None
+    
+    .Outputs
+    Bingo.Card
+#>
+
+Param(
+[Parameter(Position=0)]
+=======
+#requires -version 2.0
+
+# -----------------------------------------------------------------------------
+# Script: New-BingoCard.ps1
+# Version: 2.0
+# Author: Jeffery Hicks
+#    http://jdhitsolutions.com/blog
+#    http://twitter.com/JeffHicks
+# Date: 2/1/2011
+# Keywords:Get-Random, Arrays
+# Comments:
+#
+# "Those who neglect to script are doomed to repeat their work."
+#
+#  ****************************************************************
+#  * DO NOT USE IN A PRODUCTION ENVIRONMENT UNTIL YOU HAVE TESTED *
+#  * THOROUGHLY IN A LAB ENVIRONMENT. USE AT YOUR OWN RISK.  IF   *
+#  * YOU DO NOT UNDERSTAND WHAT THIS SCRIPT DOES OR HOW IT WORKS, *
+#  * DO NOT USE IT OUTSIDE OF A SECURE, TEST SETTING.             *
+#  ****************************************************************
+# -----------------------------------------------------------------------------
+
+Function New-BingoCard {
+
+#.ExternalHelp .\PowerShellBingo-help.xml
+
+Param(
+[Parameter(Position=0,Mandatory=$False)]
+>>>>>>> ea2a98527ff94fd5e37cc63b00af903507c30c52
+[ValidateScript({$_ -gt 0 -AND $_ -le 3})]
+[int]$Free=1
+)
+
+<<<<<<< HEAD
+Write-Verbose "Generating a card with $free free spaces"
+=======
+>>>>>>> ea2a98527ff94fd5e37cc63b00af903507c30c52
+#generate unique arrays of numbers for each letter
+$B=1..15  | Get-Random -count 15 | select -first 5 -unique
+$I=16..30 | Get-Random -count 15 | select -first 5 -unique
+$N=31..45 | Get-Random -count 15 | select -first 5 -unique
+$G=46..60 | Get-Random -count 15 | select -first 5 -unique
+$O=61..75 | Get-Random -count 15 | select -first 5 -unique
+
+$Replace=0
+Do {
+#replace a random element with a Free Space
+    $letter=1,2,3,4,5 | Get-Random
+<<<<<<< HEAD
+    $row = Get-Random -max 4
+=======
+    $row=Get-Random -max 4
+>>>>>>> ea2a98527ff94fd5e37cc63b00af903507c30c52
+    Switch ($letter) {
+        1 {$B[$row]="FS"}
+        2 {$I[$row]="FS"}
+        3 {$N[$row]="FS"}
+        4 {$G[$row]="FS"}
+        5 {$O[$row]="FS"}
+    }
+    #increment the counter
+    $Replace++
+    if ($free -gt 1)
+    {
+        #sleep just long enough so that the next random number is different
+        Start-sleep -Milliseconds 200
+    }
+} Until ($Replace -ge $Free)
+    
+#loop through for the number of items in each array, which is 5
+for ($x=0;$x -lt 5;$x++) 
+{    
+    #create a new custom object where the letters
+    #B,I,N,G,O are the properties and the corresponding
+    #value from the array is the property value
+<<<<<<< HEAD
+    
+    #create an ordered hashtable
+    $hash = [ordered]@{
+=======
+        
+    $obj=New-Object -TypeName PSObject -Property @{
+>>>>>>> ea2a98527ff94fd5e37cc63b00af903507c30c52
+        B=$b[$x]
+        I=$i[$x]
+        N=$n[$x]
+        G=$g[$x]
+        O=$o[$x]
+     } 
+<<<<<<< HEAD
+         
+    $obj = New-Object -TypeName PSObject -Property $hash
+
+=======
+>>>>>>> ea2a98527ff94fd5e37cc63b00af903507c30c52
+     #add a custom type name to this object for formatting
+     $obj.psobject.Typenames[0]="Bingo.Card"
+     #write the object to the pipeline
+     $obj
+} #close FOR
+
+} #end function
